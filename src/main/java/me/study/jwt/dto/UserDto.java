@@ -3,8 +3,12 @@ package me.study.jwt.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
+import me.study.jwt.entity.User;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -13,16 +17,30 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 public class UserDto { // 회원가입시 사용할 Dto
 
-    @NonNull
+    @NotNull
     @Size(min = 3, max = 50)
     private String username;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @NonNull
+    @NotNull
     @Size(min = 3, max = 100)
     private String password;
 
-    @NonNull
+    @NotNull
     @Size(min = 3, max = 50)
     private String nickname;
+
+    private Set<AuthorityDto> authorityDtoSet;
+
+    public static UserDto from(User user) {
+        if(user == null) return null;
+
+        return UserDto.builder()
+                .username(user.getUsername())
+                .nickname(user.getNickname())
+                .authorityDtoSet(user.getAuthorities().stream()
+                        .map(authority -> AuthorityDto.builder().authorityName(authority.getAuthorityName()).build())
+                        .collect(Collectors.toSet()))
+                .build();
+    }
 }

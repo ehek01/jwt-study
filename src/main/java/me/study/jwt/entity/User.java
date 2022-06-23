@@ -14,23 +14,20 @@ import java.util.Set;
 @NoArgsConstructor
 @Table(name = "Users") // 테이블 명.
 public class User {
-    @JsonIgnore
     @Id
-    @Column(name = "user_id")
+    @Column(name = "user_id", unique = true)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
     @Column(name = "username", length = 50, unique = true)
     private String username;
 
-    @JsonIgnore
     @Column(name = "password", length = 100)
     private String password;
 
     @Column(name = "nickname", length = 50)
     private String nickname;
 
-    @JsonIgnore
     @Column(name = "activated")
     private boolean activated; // 활성화 여부
 
